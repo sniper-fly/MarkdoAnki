@@ -1,7 +1,9 @@
 {
   "type": "module",
   "devDependencies": {
+    "highlight.js": "^11.10.0",
     "marked": "^15.0.0",
+    "marked-highlight": "^2.2.1",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   }
