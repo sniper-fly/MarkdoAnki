@@ -1,22 +1,40 @@
 import mdToHtml from "./mdToHtml";
 import { lastUpdatedAt } from "./lastUpdatedAt";
+import * as fs from "fs";
+import { listPreviousCardIds } from "./lib/listPreviousCardIds";
+import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
+import { listUpdatedCards } from "./lib/listUpdatedCards";
+import { generateHtmlFiles } from "./lib/generateHtmlFiles";
+import { deleteHtmlFiles } from "./lib/deleteHtmlFiles";
+import { deleteAnkiCards } from "./lib/deleteAnkiCards";
+import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
 
-function main() {
-  // 指定されたディレクトリ内の.mdファイルを全て読み込み、AnkiIDを取り出してSet1に格納
+async function main() {
+  // vault/notes内の.mdファイルを全て読み込み、AnkiIDを取り出してSet1に格納
+  const currentCardSet = retrieveCurrentAnkiIds("vault/notes");
 
-  // HTML出力ディレクトリからファイルを読み込み、ファイル名のSet2を作成
+  // vault/htmlからファイルを読み込み、ファイル名の配列Xを作成
+  const previousCards = listPreviousCardIds("vault/html");
 
-  // Set2にあってSet1にないAnkiID一覧配列Aを作成
+  // 配列XにあってにSet1ないAnkiID一覧配列Aを作成
+  const deletedCards = previousCards.filter(
+    (card) => !currentCardSet.has(card)
+  );
 
   // 配列AのAnkiIDに対応するAnkiカード, HTMLファイルを削除
+  deleteHtmlFiles(deletedCards);
+  await deleteAnkiCards(deletedCards);
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
+  const updatedCards = listUpdatedCards("vault/notes", lastUpdatedAt);
 
-  // 配列BのファイルにAnkiIDが付与されていれば、AnkiIDをファイル名としてHTMLファイルを出力
-
-  // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
+  // 配列BのファイルからHTMLを出力
+  await generateHtmlFiles(updatedCards);
 
   // lastUpdatedAt を現在時刻に更新
+  overWriteLastUpdatedAt();
 }
 
-main();
+(async () => {
+  await main();
+})();
