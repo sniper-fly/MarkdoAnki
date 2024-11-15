@@ -11,19 +11,19 @@ import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
 
 async function main() {
   // vault/notes内の.mdファイルを全て読み込み、AnkiIDを取り出してSet1に格納
-  const currentCardSet = retrieveCurrentAnkiIds("vault/notes");
+  const currentCardIdSet = retrieveCurrentAnkiIds("vault/notes");
 
   // vault/htmlからファイルを読み込み、ファイル名の配列Xを作成
-  const previousCards = listPreviousCardIds("vault/html");
+  const previousCardIds = listPreviousCardIds("vault/html");
 
   // 配列XにあってにSet1ないAnkiID一覧配列Aを作成
-  const deletedCards = previousCards.filter(
-    (card) => !currentCardSet.has(card)
+  const deletedCardIds = previousCardIds.filter(
+    (card) => !currentCardIdSet.has(card)
   );
 
   // 配列AのAnkiIDに対応するAnkiカード, HTMLファイルを削除
-  deleteHtmlFiles(deletedCards);
-  await deleteAnkiCards(deletedCards);
+  deleteHtmlFiles(deletedCardIds, "vault/html");
+  await deleteAnkiCards(deletedCardIds);
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
   const updatedCards = listUpdatedCards("vault/notes", lastUpdatedAt);
