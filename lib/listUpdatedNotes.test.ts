@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import { listUpdatedCards } from './listUpdatedCards';
+import { listUpdatedNotes } from './listUpdatedNotes';
 import { readdir, statSync } from 'fs';
 
 vi.mock('fs');
 
-describe('listUpdatedCards', () => {
+describe('listUpdatedNotes', () => {
   it('should list updated markdown files', () => {
     const mockFiles = ['file1.md', 'file2.md', 'file3.txt'];
     const lastUpdatedAt = new Date('2023-01-01T00:00:00Z');
@@ -20,7 +20,7 @@ describe('listUpdatedCards', () => {
       return mockStats;
     });
 
-    const result = listUpdatedCards('/mock/path', lastUpdatedAt);
+    const result = listUpdatedNotes('/mock/path', lastUpdatedAt);
     expect(result).toEqual(['/mock/path/file1.md', '/mock/path/file2.md']);
   });
 
@@ -39,7 +39,7 @@ describe('listUpdatedCards', () => {
       return mockStats;
     });
 
-    const result = listUpdatedCards('/mock/path', lastUpdatedAt);
+    const result = listUpdatedNotes('/mock/path', lastUpdatedAt);
     expect(result).toEqual([]);
   });
 });

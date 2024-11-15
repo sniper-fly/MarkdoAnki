@@ -2,7 +2,7 @@ import mdToHtml from "./mdToHtml";
 import { lastUpdatedAt } from "./lastUpdatedAt";
 import { listPreviousCardIds } from "./lib/listPreviousCardIds";
 import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
-import { listUpdatedCards } from "./lib/listUpdatedCards";
+import { listUpdatedNotes } from "./lib/listUpdatedNotes";
 import { generateHtmlFiles } from "./lib/generateHtmlFiles";
 import { deleteHtmlFiles } from "./lib/deleteHtmlFiles";
 import { deleteAnkiCards } from "./lib/deleteAnkiCards";
@@ -26,10 +26,10 @@ async function main() {
   await deleteAnkiCards(deletedCardIds);
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
-  const updatedCardPaths = listUpdatedCards("vault/notes", lastUpdatedAt);
+  const updatedNotePaths = listUpdatedNotes("vault/notes", lastUpdatedAt);
 
   // 配列BのファイルからHTMLを出力
-  await generateHtmlFiles("vault/html", updatedCardPaths);
+  await generateHtmlFiles("vault/html", updatedNotePaths);
 
   // lastUpdatedAt を現在時刻に更新
   overWriteLastUpdatedAt();
