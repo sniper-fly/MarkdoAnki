@@ -1,6 +1,6 @@
 import { readdir, statSync } from "fs";
 
-// path に存在する.mdファイルから、lastUpdatedAtより更新日時が新しいものを探してファイル名を配列に格納する
+// path に存在する.mdファイルから、lastUpdatedAtより更新日時が新しいものを探してファイル名パスを配列に格納する
 export function listUpdatedCards(path: string, lastUpdatedAt: Date): string[] {
   const updatedFiles: string[] = [];
 
@@ -18,7 +18,7 @@ export function listUpdatedCards(path: string, lastUpdatedAt: Date): string[] {
       // ファイルの更新日時を取得する
       const stats = statSync(`${path}/${file}`);
       if (stats.mtime > lastUpdatedAt) {
-        updatedFiles.push(file);
+        updatedFiles.push(`${path}/${file}`);
       }
     });
   });

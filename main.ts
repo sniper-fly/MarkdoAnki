@@ -26,10 +26,10 @@ async function main() {
   await deleteAnkiCards(deletedCardIds);
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
-  const updatedCards = listUpdatedCards("vault/notes", lastUpdatedAt);
+  const updatedCardPaths = listUpdatedCards("vault/notes", lastUpdatedAt);
 
   // 配列BのファイルからHTMLを出力
-  await generateHtmlFiles(updatedCards);
+  await generateHtmlFiles("vault/html", updatedCardPaths);
 
   // lastUpdatedAt を現在時刻に更新
   overWriteLastUpdatedAt();
