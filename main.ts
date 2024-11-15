@@ -1,6 +1,5 @@
 import mdToHtml from "./mdToHtml";
 import { lastUpdatedAt } from "./lastUpdatedAt";
-import * as fs from "fs";
 import { listPreviousCardIds } from "./lib/listPreviousCardIds";
 import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
 import { listUpdatedCards } from "./lib/listUpdatedCards";
@@ -8,6 +7,7 @@ import { generateHtmlFiles } from "./lib/generateHtmlFiles";
 import { deleteHtmlFiles } from "./lib/deleteHtmlFiles";
 import { deleteAnkiCards } from "./lib/deleteAnkiCards";
 import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
+import { invokeAnkiApi } from "./lib/invokeAnkiApi";
 
 async function main() {
   // vault/notes内の.mdファイルを全て読み込み、AnkiIDを取り出してSet1に格納
@@ -36,8 +36,9 @@ async function main() {
 }
 
 (async () => {
+  const res = await invokeAnkiApi("findNotes", { query: "deck:test1" });
+  console.log(await res.json());
   // await main();
-
   // const response = await invokeAnkiApi("addNote", {
   //   note: {
   //     deckName: "test1",
