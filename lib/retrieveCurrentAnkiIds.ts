@@ -1,4 +1,5 @@
 import { readdir, readFileSync } from "fs";
+import { extractAnkiId } from "./extractAnkiId";
 
 /*
 mdファイルの形式
@@ -29,14 +30,9 @@ export function retrieveCurrentAnkiIds(path: string): Set<string> {
       }
       // .mdファイルを読み込む
       const data = readFileSync(`${path}/${file}`, "utf8");
-      // --- を見つけたら、その中にAnkiIDがあるかを確認する
-      const frontMatter = data.match(/---\n([\s\S]*?)---/);
-      if (!frontMatter) {
-        return;
-      }
-      const ankiId = frontMatter[1].match(/AnkiID:\s*([-\d]+)/);
+      const ankiId = extractAnkiId(data);
       if (ankiId) {
-        ankiIds.add(ankiId[1]);
+        ankiIds.add(ankiId);
       }
     });
   });
