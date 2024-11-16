@@ -51,4 +51,22 @@ AnkiID:
 `; // Empty string lies on this line
     expect(result).toBe(expected);
   });
+
+  it('should handle file with long bar ----------', () => {
+    const data = `\
+SomeContent below
+--------------
+`;
+    const ankiId = 1234;
+    const result = insertAnkiID(data, ankiId);
+    const expected = `\
+---
+AnkiID:
+  1234
+---
+SomeContent below
+--------------
+`; // Empty string lies on this line
+    expect(result).toBe(expected);
+  });
 });

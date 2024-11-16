@@ -63,4 +63,14 @@ Some content here
     const result = extractTags(data);
     expect(result).toEqual([]);
   });
+
+  it("should do nothing with long bar ---------", () => {
+    const data = `
+Some content here
+------------
+aaa
+`;
+    const result = extractTags(data);
+    expect(result).toEqual([]);
+  });
 });
