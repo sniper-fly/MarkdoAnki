@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from "fs";
 import { invokeAnkiApi } from "./invokeAnkiApi";
 import { extractTags } from "./extractTags";
 import { mdToHtml } from "./mdToHtml";
+import { insertAnkiID } from "./insertAnkiID";
 
 export async function generateAnkiCards(
   vaultPath: string,
@@ -14,10 +15,8 @@ export async function generateAnkiCards(
   // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
 
   for (const note of notes) {
-    const data = readFileSync(
-      `${vaultPath}/${notePathRelative}/${note}`,
-      "utf8"
-    );
+    const notePath = `${vaultPath}/${notePathRelative}/${note}`;
+    const data = readFileSync(notePath, "utf8");
     const ankiId = extractAnkiId(data);
     const tags = extractTags(data);
     const html = await mdToHtml(data, `${notePathRelative}/${note}`);
@@ -60,7 +59,7 @@ export async function generateAnkiCards(
       }
       writeFileSync(`${vaultPath}/${htmlPathRelative}/${ankiId}.html`, html);
       // AnkiIDを.mdファイルに付与して保存
-
+      writeFileSync(notePath, insertAnkiID(data, ankiId));
     }
   }
 

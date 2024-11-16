@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { insertAnkiID } from './writeAnkiId';
+import { insertAnkiID } from './insertAnkiID';
 
 describe('insertAnkiID', () => {
   it('should insert AnkiID into front matter if it does not exist', () => {
