@@ -18,7 +18,7 @@ export function listUpdatedNotes(path: string, lastUpdatedAt: Date): string[] {
       // ファイルの更新日時を取得する
       const stats = statSync(`${path}/${file}`);
       if (stats.mtime > lastUpdatedAt) {
-        updatedFiles.push(`${path}/${file}`);
+        updatedFiles.push(`${file}`);
       }
     });
   });

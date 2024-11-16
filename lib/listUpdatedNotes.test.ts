@@ -21,7 +21,7 @@ describe('listUpdatedNotes', () => {
     });
 
     const result = listUpdatedNotes('/mock/path', lastUpdatedAt);
-    expect(result).toEqual(['/mock/path/file1.md', '/mock/path/file2.md']);
+    expect(result).toEqual(['file1.md', 'file2.md']);
   });
 
   it('should handle files that are not updated', () => {
