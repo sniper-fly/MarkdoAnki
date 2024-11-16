@@ -1,37 +1,65 @@
 import { extractAnkiId } from "./extractAnkiId";
 import { readFileSync, writeFileSync } from "fs";
 import { invokeAnkiApi } from "./invokeAnkiApi";
+import { extractTags } from "./extractTags";
+import { mdToHtml } from "./mdToHtml";
 
-export async function generateAnkiCards(vaultPath: string, htmlPathRelative: string, notePathRelative: string, notes: string[]) {
+export async function generateAnkiCards(
+  vaultPath: string,
+  htmlPathRelative: string, // vaultPathからの相対パス
+  notePathRelative: string, // vaultPathからの相対パス
+  notes: string[] // ファイル名の配列
+) {
   // NoteにAnkiIDが付与されていれば、AnkiIDをファイル名としてHTMLファイルを出力
   // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
 
   for (const note of notes) {
-    const notePath = `${vaultPath}/${notePathRelative}/${note}`;
-    const data = readFileSync(notePath, "utf8");
+    const data = readFileSync(
+      `${vaultPath}/${notePathRelative}/${note}`,
+      "utf8"
+    );
     const ankiId = extractAnkiId(data);
+    const tags = extractTags(data);
+    const html = await mdToHtml(data, `${notePathRelative}/${note}`);
     if (ankiId) {
-      const html = mdToHtml(data, `${notePathRelative}/${note}`);
-      writeFileSync(`${vaultPath}/${htmlPathRelative}/${ankiId}.html`, html);
-    } else {
-      const html = mdToHtml(data);
-      writeFileSync(`${vaultPath}/${htmlPathRelative}/${note}.html`, html);
-      const response = await invokeAnkiApi("addNote", {
+      const response = await invokeAnkiApi("updateNotes", {
         note: {
-          deckName: "test1",
-          modelName: "基本",
+          id: ankiId,
           fields: {
-            表面: "link test",
-            裏面: `<a href="Obsidian://open?vault=til_vault&file=${notePath}">Open in Obsidian</a>`,
+            表面: note,
+            裏面: html,
           },
-          tags: ["test"],
+          tags: tags,
         },
       });
-      const data = await response.json();
-      console.log(data);
+      const err = (await response.json()).error;
+      if (err) {
+        throw new Error(err);
+      }
+      writeFileSync(`${vaultPath}/${htmlPathRelative}/${ankiId}.html`, html);
+    } else {
+      const response = await invokeAnkiApi("addNote", {
+        note: {
+          deckName: "ObsidianTIL",
+          modelName: "基本",
+          fields: {
+            表面: note,
+            裏面: html,
+          },
+          tags: tags,
+        },
+      });
+      const json = await response.json();
+      const ankiId: number = json.result;
+      const err = json.error;
+      if (err) {
+        throw new Error(err);
+      }
+      writeFileSync(`${vaultPath}/${htmlPathRelative}/${ankiId}.html`, html);
+      // AnkiIDを.mdファイルに付与して保存
+
     }
   }
-
 
   // notePathのファイルを順番に読み込む
   // for (const notePath of notePaths) {
