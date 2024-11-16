@@ -68,4 +68,22 @@ Some content here
     const result = extractAnkiId(data);
     expect(result).toBe('-1234');
   });
+
+  it('should extract the very first frontMatter', () => {
+    const data = `
+---
+tags:
+  - mysql
+AnkiID:
+  1234
+---
+Some content here
+---
+AnkiID:
+  3456
+---
+`;
+    const result = extractAnkiId(data);
+    expect(result).toBe('1234');
+  });
 });
