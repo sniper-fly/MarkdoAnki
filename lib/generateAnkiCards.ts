@@ -19,7 +19,7 @@ export async function generateAnkiCards(
     const data = readFileSync(notePath, "utf8");
     const ankiId = extractAnkiId(data);
     const tags = extractTags(data);
-    const html = await mdToHtml(data, `${notePathRelative}/${note}`);
+    const html = await mdToHtml(data, `${notePathRelative}/${note}`, vaultPath);
     if (ankiId) {
       if (ankiId === "-1") {
         continue;

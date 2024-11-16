@@ -14,7 +14,7 @@ tags:
 This is a test.
 `;
     const notePath = 'path/to/hello.md';
-    const result = await mdToHtml(markdown, notePath);
+    const result = await mdToHtml(markdown, notePath, 'path/to/til_vault/');
     const expectedHtml = `
 <a href="obsidian://open?vault=til_vault&file=path%2Fto%2Fhello">Open in Obsidian</a>
 <h1>Hello World</h1>
@@ -31,7 +31,7 @@ This is a test.
 This is a test.
 `;
     const notePath = 'path/to/hello.md';
-    const result = await mdToHtml(markdown, notePath);
+    const result = await mdToHtml(markdown, notePath, '/full/path/til_vault/');
     const expectedHtml = `
 <a href="obsidian://open?vault=til_vault&file=path%2Fto%2Fhello">Open in Obsidian</a>
 <h1>Hello World</h1>
@@ -44,7 +44,7 @@ This is a test.
   it('should handle empty markdown', async () => {
     const markdown = ``;
     const notePath = 'path/to/hello.md';
-    const result = await mdToHtml(markdown, notePath);
+    const result = await mdToHtml(markdown, notePath, 'til_vault');
     const expectedHtml = `
 <a href="obsidian://open?vault=til_vault&file=path%2Fto%2Fhello">Open in Obsidian</a>
 `.trim();

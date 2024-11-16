@@ -15,14 +15,16 @@ const marked = new Marked(
 );
 
 // ./hello.md を読み込んで HTML に変換
-export async function mdToHtml(data: string, notePath: string) {
+export async function mdToHtml(data: string, notePath: string, vaultPath: string) {
   // data 先頭の Front Matter を削除
   const html = marked.parse(data.replace(/---\n([\s\S]*?)---/, ""));
   // notePath から末尾の .md を削除
-  notePath = notePath.replace(/\.md$/, "");
+  const noteTitle = notePath.replace(/\.md$/, "");
+  // vault名は/で区切られていた場合は最後の空白でない要素を取得
+  const vaultName = vaultPath.split("/").filter((x) => x !== "").pop();
   // obsidianへのリンクを作成し、URLエンコード
-  const obsidianLink = `obsidian://open?vault=til_vault&file=${encodeURIComponent(
-    notePath
+  const obsidianLink = `obsidian://open?vault=${vaultName}&file=${encodeURIComponent(
+    noteTitle
   )}`;
   // html 先頭にObsidianリンクを追加
   const obsidianTag = `<a href="${obsidianLink}">Open in Obsidian</a>`;
