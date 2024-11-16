@@ -3,7 +3,7 @@ import { lastUpdatedAt } from "./lastUpdatedAt";
 import { listPreviousCardIds } from "./lib/listPreviousCardIds";
 import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
 import { listUpdatedNotes } from "./lib/listUpdatedNotes";
-import { generateHtmlFiles } from "./lib/generateHtmlFiles";
+import { generateAnkiCards } from "./lib/generateAnkiCards";
 import { deleteHtmlFiles } from "./lib/deleteHtmlFiles";
 import { deleteAnkiCards } from "./lib/deleteAnkiCards";
 import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
@@ -29,7 +29,7 @@ async function main() {
   const updatedNotes = listUpdatedNotes("vault/notes", lastUpdatedAt);
 
   // 配列BのファイルからHTMLを出力
-  await generateHtmlFiles("vault/html", updatedNotes);
+  await generateAnkiCards("vault", "html", "notes", updatedNotes);
 
   // lastUpdatedAt を現在時刻に更新
   overWriteLastUpdatedAt();
