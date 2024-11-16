@@ -28,7 +28,7 @@ export async function generateAnkiCards(
         note: {
           id: Number(ankiId),
           fields: {
-            表面: note,
+            表面: note.replace(/\.md$/, ""),
             裏面: html,
           },
           tags: tags,
@@ -45,7 +45,7 @@ export async function generateAnkiCards(
           deckName: "ObsidianTIL",
           modelName: "基本",
           fields: {
-            表面: note,
+            表面: note.replace(/\.md$/, ""),
             裏面: html,
           },
           tags: tags,
