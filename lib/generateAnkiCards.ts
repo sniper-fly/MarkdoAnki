@@ -7,19 +7,19 @@ import { insertAnkiID } from "./insertAnkiID";
 
 export async function generateAnkiCards(
   vaultPath: string,
-  htmlPathRelative: string, // vaultPathからの相対パス
-  notePathRelative: string, // vaultPathからの相対パス
+  htmlGenPath: string,
+  notesPath: string,
   notes: string[] // ファイル名の配列
 ) {
   // NoteにAnkiIDが付与されていれば、AnkiIDをファイル名としてHTMLファイルを出力
   // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
 
   for (const note of notes) {
-    const notePath = `${vaultPath}/${notePathRelative}/${note}`;
+    const notePath = `${notesPath}/${note}`;
     const data = readFileSync(notePath, "utf8");
     const ankiId = extractAnkiId(data);
     const tags = extractTags(data);
-    const html = await mdToHtml(data, `${notePathRelative}/${note}`, vaultPath);
+    const html = await mdToHtml(data, `${notesPath}/${note}`, vaultPath);
     if (ankiId) {
       if (ankiId === "-1") {
         continue;
@@ -38,7 +38,7 @@ export async function generateAnkiCards(
       if (err) {
         throw new Error(err);
       }
-      writeFileSync(`${vaultPath}/${htmlPathRelative}/${ankiId}.html`, html);
+      writeFileSync(`${htmlGenPath}/${ankiId}.html`, html);
     } else {
       const response = await invokeAnkiApi("addNote", {
         note: {
@@ -57,7 +57,7 @@ export async function generateAnkiCards(
       if (err) {
         throw new Error(err);
       }
-      writeFileSync(`${vaultPath}/${htmlPathRelative}/${ankiId}.html`, html);
+      writeFileSync(`${htmlGenPath}/${ankiId}.html`, html);
       // AnkiIDを.mdファイルに付与して保存
       writeFileSync(notePath, insertAnkiID(data, ankiId));
     }

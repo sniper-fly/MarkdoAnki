@@ -1,4 +1,3 @@
-import mdToHtml from "./mdToHtml";
 import { lastUpdatedAt } from "./lastUpdatedAt";
 import { listPreviousCardIds } from "./lib/listPreviousCardIds";
 import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
@@ -9,12 +8,19 @@ import { deleteAnkiCards } from "./lib/deleteAnkiCards";
 import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
 import { invokeAnkiApi } from "./lib/invokeAnkiApi";
 
+// pathは全てこのmainに対する相対パス
+const config = {
+  vaultPath: "vault", // vaultのパス
+  notesPath: "vault", // .mdファイルが格納されているディレクトリ
+  htmlGenPath: "vault/html", // .htmlファイルを出力するディレクトリ
+}
+
 async function main() {
   // vault/notes内の.mdファイルを全て読み込み、AnkiIDを取り出してSet1に格納
-  const currentCardIdSet = retrieveCurrentAnkiIds("vault/notes");
+  const currentCardIdSet = retrieveCurrentAnkiIds(config.notesPath);
 
   // vault/htmlからファイルを読み込み、ファイル名の配列Xを作成
-  const previousCardIds = listPreviousCardIds("vault/html");
+  const previousCardIds = listPreviousCardIds(config.htmlGenPath);
 
   // 配列XにあってにSet1ないAnkiID一覧配列Aを作成
   const deletedCardIds = previousCardIds.filter(
@@ -22,14 +28,14 @@ async function main() {
   );
 
   // 配列AのAnkiIDに対応するAnkiカード, HTMLファイルを削除
-  deleteHtmlFiles(deletedCardIds, "vault/html");
+  deleteHtmlFiles(deletedCardIds, config.htmlGenPath);
   await deleteAnkiCards(deletedCardIds);
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
-  const updatedNotes = listUpdatedNotes("vault/notes", lastUpdatedAt);
+  const updatedNotes = listUpdatedNotes(config.notesPath, lastUpdatedAt);
 
   // 配列BのファイルからHTMLを出力
-  await generateAnkiCards("vault", "html", "notes", updatedNotes);
+  await generateAnkiCards(config.vaultPath, config.htmlGenPath, config.notesPath, updatedNotes);
 
   // lastUpdatedAt を現在時刻に更新
   overWriteLastUpdatedAt();
