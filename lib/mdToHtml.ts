@@ -1,5 +1,4 @@
-import { Marked, use } from "marked";
-import * as fs from "fs";
+import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js"; // highlight.jsをインポート
 
@@ -16,8 +15,7 @@ const marked = new Marked(
 );
 
 // ./hello.md を読み込んで HTML に変換
-export default function mdToHtml() {
-  const md = fs.readFileSync("./hello.md", "utf-8");
-  const html = marked.parse(md);
-  console.log(html);
+export async function mdToHtml(data: string, notePath: string) {
+  const html = marked.parse(data);
+  return html;
 }
