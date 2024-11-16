@@ -22,9 +22,12 @@ export async function generateAnkiCards(
     const tags = extractTags(data);
     const html = await mdToHtml(data, `${notePathRelative}/${note}`);
     if (ankiId) {
+      if (ankiId === "-1") {
+        continue;
+      }
       const response = await invokeAnkiApi("updateNotes", {
         note: {
-          id: ankiId,
+          id: Number(ankiId),
           fields: {
             表面: note,
             裏面: html,
