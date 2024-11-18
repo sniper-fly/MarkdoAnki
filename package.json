@@ -11,5 +11,8 @@
   },
   "scripts": {
     "create": "npx tsx ./main.ts"
+  },
+  "dependencies": {
+    "node-notifier": "^10.0.1"
   }
 }
