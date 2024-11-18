@@ -9,7 +9,7 @@ export const config = {
   vaultPath: "vault", // vaultのパス
   notesPath: "vault", // .mdファイルが格納されているディレクトリ
   htmlGenPath: "vault/html", // .htmlファイルを出力するディレクトリ
-  deckName: "ObsidianTIL", // Ankiのデッキ名
+  deck: "ObsidianTIL", // Ankiのデッキ名
   modelName: "MarkdoAnki", // Ankiのノートタイプ名 (モデル名)
   cardTemplates: [
     {

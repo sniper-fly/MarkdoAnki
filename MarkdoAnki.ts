@@ -13,7 +13,7 @@ export async function MarkdoAnki({
   vaultPath,
   notesPath,
   htmlGenPath,
-  deckName,
+  deck,
   modelName,
   cardTemplates,
 }: Config) {
@@ -55,7 +55,7 @@ export async function MarkdoAnki({
     vaultPath,
     notesPath,
     htmlGenPath,
-    deckName,
+    deck,
     modelName,
     cardTemplates,
   });

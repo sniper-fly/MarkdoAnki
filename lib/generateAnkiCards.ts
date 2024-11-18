@@ -15,7 +15,7 @@ export async function generateAnkiCards({
   vaultPath,
   notesPath,
   htmlGenPath,
-  deckName,
+  deck,
   modelName,
 }: Props) {
   // NoteにAnkiIDが付与されていれば、AnkiIDをファイル名としてHTMLファイルを出力
@@ -31,7 +31,7 @@ export async function generateAnkiCards({
       if (ankiId === "-1") {
         continue;
       }
-      const response = await invokeAnkiApi("updateNotes", {
+      const response = await invokeAnkiApi("updateNote", {
         note: {
           id: Number(ankiId),
           fields: {
@@ -49,7 +49,7 @@ export async function generateAnkiCards({
     } else {
       const response = await invokeAnkiApi("addNote", {
         note: {
-          deckName,
+          deckName: deck,
           modelName,
           fields: {
             Front: note.replace(/\.md$/, ""),
