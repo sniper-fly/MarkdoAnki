@@ -1,6 +1,5 @@
 import { extractAnkiId } from "./extractAnkiId";
 import { readFileSync, writeFileSync } from "fs";
-import { invokeAnkiApi } from "./invokeAnkiApi";
 import { extractTags } from "./extractTags";
 import { mdToHtml } from "./mdToHtml";
 import { insertAnkiID } from "./insertAnkiID";
@@ -41,37 +40,4 @@ export async function generateAnkiCards({
       writeFileSync(notePath, insertAnkiID(data, ankiId));
     }
   }
-
-  // notePathのファイルを順番に読み込む
-  // for (const notePath of notePaths) {
-  //   // notePathのファイルを読み込む
-  //   const data = readFileSync(notePath, "utf8");
-  //   // --- を見つけたら、その中にAnkiIDがあるかを確認する
-  //   const ankiId = extractAnkiId(data);
-  //   if (ankiId) {
-  //     // AnkiIDが存在する場合
-  //     // AnkiIDをファイル名としてHTMLファイルを出力
-  //     const html = mdToHtml(data);
-  //     writeFileSync(`${exportPath}/${ankiId}.html`, html);
-  //   } else {
-  //     // AnkiIDが存在しない場合
-  //     // HTMLファイルを出力
-  //     const html = mdToHtml(data);
-  //     writeFileSync(`${exportPath}/${notePath}.html`, html);
-  //     // Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
-  //     const response = await invokeAnkiApi("addNote", {
-  //       note: {
-  //         deckName: "test1",
-  //         modelName: "基本",
-  //         fields: {
-  //           表面: "link test",
-  //           裏面: `<a href="Obsidian://open?vault=til_vault&file=${notePath}">Open in Obsidian</a>`,
-  //         },
-  //         tags: ["test"],
-  //       },
-  //     });
-  //     const data = await response.json();
-  //     console.log(data);
-  //   }
-  // }
 }
