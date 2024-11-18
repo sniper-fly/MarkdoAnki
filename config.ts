@@ -2,6 +2,10 @@
 export type Config = typeof config;
 
 export const config = {
+  // true: 全ての.mdファイルをAnkiカードに変換。初回起動時など。
+  // false: 更新された.mdファイルのみをAnkiカードに変換。高速。
+  createAllCards: true,
+
   vaultPath: "vault", // vaultのパス
   notesPath: "vault", // .mdファイルが格納されているディレクトリ
   htmlGenPath: "vault/html", // .htmlファイルを出力するディレクトリ

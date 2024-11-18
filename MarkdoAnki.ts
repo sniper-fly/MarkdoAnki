@@ -1,4 +1,3 @@
-import { lastUpdatedAt } from "./lastUpdatedAt";
 import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
 import { listUpdatedNotes } from "./lib/listUpdatedNotes";
 import { generateAnkiCards } from "./lib/generateAnkiCards";
@@ -7,8 +6,10 @@ import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
 import { readdirSync, unlinkSync } from "fs";
 import { Config } from "./config";
 import { invokeAnkiApi } from "./lib/invokeAnkiApi";
+import { getLastUpdatedAt } from "./lib/getLastUpdatedAt";
 
 export async function MarkdoAnki({
+  createAllCards,
   vaultPath,
   notesPath,
   htmlGenPath,
@@ -16,6 +17,8 @@ export async function MarkdoAnki({
   modelName,
   cardTemplates,
 }: Config) {
+  const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
+
   // noteディレクトリ内の.mdファイルを全て読み込み、AnkiIDを取り出してSetに格納
   const currentCardIdSet = retrieveCurrentAnkiIds(notesPath);
 

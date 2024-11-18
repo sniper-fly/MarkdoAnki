@@ -8,7 +8,7 @@ import { Config } from "../config";
 
 type Props = {
   notes: string[];
-} & Config;
+} & Omit<Config, 'createAllCards'> ;
 
 export async function generateAnkiCards({
   notes,
