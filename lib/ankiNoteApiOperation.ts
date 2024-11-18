@@ -33,7 +33,7 @@ export async function addAnkiNote(
   note: string,
   html: string,
   tags: string[]
-) {
+): Promise<number> {
   const response = await invokeAnkiApi("addNote", {
     note: {
       deckName: deck,
@@ -49,5 +49,5 @@ export async function addAnkiNote(
   if (json.error) {
     throw new Error(json.error + ": " + note);
   }
-  return json.result.noteId;
+  return json.result;
 }
