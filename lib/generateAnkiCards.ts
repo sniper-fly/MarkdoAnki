@@ -4,13 +4,20 @@ import { invokeAnkiApi } from "./invokeAnkiApi";
 import { extractTags } from "./extractTags";
 import { mdToHtml } from "./mdToHtml";
 import { insertAnkiID } from "./insertAnkiID";
+import { Config } from "../config";
 
-export async function generateAnkiCards(
-  vaultPath: string,
-  htmlGenPath: string,
-  notesPath: string,
-  notes: string[] // ファイル名の配列
-) {
+type Props = {
+  notes: string[];
+} & Config;
+
+export async function generateAnkiCards({
+  notes,
+  vaultPath,
+  notesPath,
+  htmlGenPath,
+  deckName,
+  modelName,
+}: Props) {
   // NoteにAnkiIDが付与されていれば、AnkiIDをファイル名としてHTMLファイルを出力
   // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
 
@@ -28,8 +35,8 @@ export async function generateAnkiCards(
         note: {
           id: Number(ankiId),
           fields: {
-            表面: note.replace(/\.md$/, ""),
-            裏面: html,
+            Front: note.replace(/\.md$/, ""),
+            Back: html,
           },
           tags: tags,
         },
@@ -42,11 +49,11 @@ export async function generateAnkiCards(
     } else {
       const response = await invokeAnkiApi("addNote", {
         note: {
-          deckName: "ObsidianTIL",
-          modelName: "基本",
+          deckName,
+          modelName,
           fields: {
-            表面: note.replace(/\.md$/, ""),
-            裏面: html,
+            Front: note.replace(/\.md$/, ""),
+            Back: html,
           },
           tags: tags,
         },

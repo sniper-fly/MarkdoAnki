@@ -5,4 +5,24 @@ export const config = {
   vaultPath: "vault", // vaultのパス
   notesPath: "vault", // .mdファイルが格納されているディレクトリ
   htmlGenPath: "vault/html", // .htmlファイルを出力するディレクトリ
+  deckName: "ObsidianTIL", // Ankiのデッキ名
+  modelName: "MarkdoAnki", // Ankiのノートタイプ名 (モデル名)
+  cardTemplates: [
+    {
+      Name: "DefaultCard",
+      Front: "{{Front}}",
+      Back: /* html */ `
+        {{FrontSide}}
+        <hr id=answer>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+        <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/graphql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/makefile.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/nginx.min.js"></script>
+        {{Back}}
+      `,
+    },
+  ],
 };
