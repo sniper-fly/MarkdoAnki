@@ -8,7 +8,7 @@ export async function updateAnkiNote(
 ) {
   const ankiIdNum = Number(ankiId);
   if (isNaN(ankiIdNum)) {
-    throw new Error("Invalid Anki ID");
+    throw new Error("Invalid Anki ID" + ": " + ankiId);
   }
 
   const response = await invokeAnkiApi("updateNote", {
@@ -23,7 +23,7 @@ export async function updateAnkiNote(
   });
   const err = (await response.json()).error;
   if (err) {
-    throw new Error(err);
+    throw new Error(err + ": " + note);
   }
 }
 
@@ -47,7 +47,7 @@ export async function addAnkiNote(
   });
   const json = await response.json();
   if (json.error) {
-    throw new Error(json.error);
+    throw new Error(json.error + ": " + note);
   }
   return json.result.noteId;
 }

@@ -5,7 +5,7 @@ export async function deleteAnkiCards(ids: string[]) {
   const numIds = ids.map((id) => Number(id));
   // Number に変換できないものがある場合はエラーを返す
   if (numIds.some((id) => isNaN(id))) {
-    throw new Error("Invalid Ids");
+    throw new Error("Invalid Ids" + ": " + ids);
   }
 
   const res = await invokeAnkiApi("deleteNotes", { notes: numIds });
