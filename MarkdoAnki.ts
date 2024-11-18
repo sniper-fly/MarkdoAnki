@@ -33,7 +33,7 @@ export async function MarkdoAnki({
   );
 
   // 配列AのAnkiIDに対応するAnkiカード, HTMLファイルを削除
-  deletedCardIds.forEach((id) => unlinkSync(`${notesPath}/${id}.md`));
+  deletedCardIds.forEach((id) => unlinkSync(`${htmlGenPath}/${id}.html`));
   await deleteAnkiCards(deletedCardIds);
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
