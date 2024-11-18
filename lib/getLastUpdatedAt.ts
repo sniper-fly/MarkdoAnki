@@ -5,8 +5,12 @@ import { readFileSync } from "fs";
 
 export function getLastUpdatedAt() {
   try {
-    const data = readFileSync("lastUpdatedAt", "utf8");
-    return new Date(data);
+    const data = readFileSync("lastUpdatedAt", "utf8").trim();
+    const date = new Date(data.trim());
+    if (isNaN(date.getTime())) {
+      return new Date(0);
+    }
+    return date;
   } catch (_e) {
     return new Date(0);
   }
