@@ -40,7 +40,7 @@ export async function MarkdoAnki({
   const updatedNotes = listUpdatedNotes(notesPath, lastUpdatedAt);
 
   // deck作成 (すでにあればスキップ)
-  await invokeAnkiApi("createDeck", { deckName });
+  await invokeAnkiApi("createDeck", { deck });
 
   // NoteType(model)作成 (すでにあればスキップ)
   await invokeAnkiApi("createModel", {
