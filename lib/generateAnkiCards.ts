@@ -5,10 +5,11 @@ import { extractTags } from "./extractTags";
 import { mdToHtml } from "./mdToHtml";
 import { insertAnkiID } from "./insertAnkiID";
 import { Config } from "../config";
+import { addAnkiNote, updateAnkiNote } from "./ankiNoteApiOperation";
 
 type Props = {
   notes: string[];
-} & Omit<Config, 'createAllCards'> ;
+} & Omit<Config, "createAllCards">;
 
 export async function generateAnkiCards({
   notes,
@@ -31,39 +32,10 @@ export async function generateAnkiCards({
       if (ankiId === "-1") {
         continue;
       }
-      const response = await invokeAnkiApi("updateNote", {
-        note: {
-          id: Number(ankiId),
-          fields: {
-            Front: note.replace(/\.md$/, ""),
-            Back: html,
-          },
-          tags: tags,
-        },
-      });
-      const err = (await response.json()).error;
-      if (err) {
-        throw new Error(err);
-      }
+      await updateAnkiNote(ankiId, note, html, tags);
       writeFileSync(`${htmlGenPath}/${ankiId}.html`, html);
     } else {
-      const response = await invokeAnkiApi("addNote", {
-        note: {
-          deckName: deck,
-          modelName,
-          fields: {
-            Front: note.replace(/\.md$/, ""),
-            Back: html,
-          },
-          tags: tags,
-        },
-      });
-      const json = await response.json();
-      const ankiId: number = json.result;
-      const err = json.error;
-      if (err) {
-        throw new Error(err);
-      }
+      const ankiId = await addAnkiNote(deck, modelName, note, html, tags);
       writeFileSync(`${htmlGenPath}/${ankiId}.html`, html);
       // AnkiIDを.mdファイルに付与して保存
       writeFileSync(notePath, insertAnkiID(data, ankiId));
