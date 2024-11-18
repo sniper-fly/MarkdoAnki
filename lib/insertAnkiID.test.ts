@@ -69,4 +69,9 @@ SomeContent below
 `; // Empty string lies on this line
     expect(result).toBe(expected);
   });
+
+  it('should throw an error when ankiId is undefined', () => {
+    const data = `Some content here`;
+    expect(() => insertAnkiID(data)).toThrow("AnkiID is not defined");
+  });
 });

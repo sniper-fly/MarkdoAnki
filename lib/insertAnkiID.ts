@@ -1,4 +1,8 @@
 export function insertAnkiID(data: string, ankiId: number) {
+  if (ankiId === undefined) {
+    throw new Error("AnkiID is not defined");
+  }
+
   const frontMatter = data.match(/---\n([\s\S]*?)---/);
   if (!frontMatter) {
     // --- が存在しない場合は、先頭に追加する
