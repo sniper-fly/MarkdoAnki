@@ -11,7 +11,7 @@ export function parseAnkiIdRecord(ankiIdRecordPath: string) {
   } catch (e) {
     const err = e as NodeJS.ErrnoException;
     if (err.code === "ENOENT") {
-      console.log("File not found");
+      console.log("Record File not found. Continue without it.");
     } else {
       throw err;
     }
