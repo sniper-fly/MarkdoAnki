@@ -1,11 +1,11 @@
-import { listUpdatedNoteTitles } from "./lib/listUpdatedNoteTitles";
-import { generateAnkiCards } from "./lib/generateAnkiCards";
-import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
-import { Config } from "./config";
-import { invokeAnkiApi } from "./lib/invokeAnkiApi";
-import { getLastUpdatedAt } from "./lib/getLastUpdatedAt";
-import { listNoteTitles } from "./lib/listNoteTitles";
-import { parseAnkiIdRecord } from "./lib/parseAnkiIdRecord";
+import { listUpdatedNoteTitles } from "./listUpdatedNoteTitles";
+import { generateAnkiCards } from "./generateAnkiCards";
+import { overWriteLastUpdatedAt } from "./overWriteLastUpdatedAt";
+import { Config } from "../config";
+import { invokeAnkiApi } from "./invokeAnkiApi";
+import { getLastUpdatedAt } from "./getLastUpdatedAt";
+import { listNoteTitles } from "./listNoteTitles";
+import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
 
 export async function MarkdoAnki({
   createAllCards,

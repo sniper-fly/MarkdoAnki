@@ -1,4 +1,4 @@
-import { MarkdoAnki } from "./MarkdoAnki";
+import { MarkdoAnki } from "./lib/MarkdoAnki";
 import { config } from "./config";
 import notifier from 'node-notifier';
 
