@@ -3,38 +3,38 @@ import { listUpdatedNotes } from "./lib/listUpdatedNotes";
 import { generateAnkiCards } from "./lib/generateAnkiCards";
 import { deleteAnkiCards } from "./lib/deleteAnkiCards";
 import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
-import { readdirSync, unlinkSync } from "fs";
 import { Config } from "./config";
 import { invokeAnkiApi } from "./lib/invokeAnkiApi";
 import { getLastUpdatedAt } from "./lib/getLastUpdatedAt";
+import { noteFilenames } from "./lib/noteFilenames";
+import { parseAnkiIdRecord } from "./lib/parseAnkiIdRecord";
 
 export async function MarkdoAnki({
   createAllCards,
   vaultPath,
   notesPath,
-  htmlGenPath,
+  ankiIdRecordPath,
   deck,
   modelName,
   cardTemplates,
 }: Config) {
   const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
 
-  // noteディレクトリ内の.mdファイルを全て読み込み、AnkiIDを取り出してSetに格納
-  const currentCardIdSet = retrieveCurrentAnkiIds(notesPath);
+  // Get a list of .md files in the note directory and store it in Set
+  const noteFilesSet = noteFilenames(notesPath);
 
-  // html出力先ディレクトリからファイルを読み込み、ファイル名の配列Xを作成
-  const previousCardIds = readdirSync(htmlGenPath).map((file) =>
-    file.replace(".html", "")
-  );
+  // Read previousCardIdsRecord from ankiIdRecordPath
+  // and create an object with filename as key and AnkiID as value.
+  const previousFilename2AnkiId = parseAnkiIdRecord(ankiIdRecordPath);
 
-  // 配列XにあってにSetにないAnkiID一覧配列Aを作成
-  const deletedCardIds = previousCardIds.filter(
-    (card) => !currentCardIdSet.has(card)
-  );
+  // Convert object to an object array of { key=filename, value=AnkiID },
+  // creating an object array listing filenames not in the Set.
+  const deletedCardIds = Object.entries(previousFilename2AnkiId)
+    .filter(([filename]) => !noteFilesSet.has(filename))
+    .map(([, id]) => id);
 
-  // 配列AのAnkiIDに対応するAnkiカード, HTMLファイルを削除
-  deletedCardIds.forEach((id) => unlinkSync(`${htmlGenPath}/${id}.html`));
-  await deleteAnkiCards(deletedCardIds);
+  // 対応するAnkiカードを削除
+  await invokeAnkiApi("deleteNotes", { notes: deletedCardIds });
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
   const updatedNotes = listUpdatedNotes(notesPath, lastUpdatedAt);
@@ -52,9 +52,10 @@ export async function MarkdoAnki({
   // 配列BのファイルからHTMLを出力
   await generateAnkiCards({
     notes: updatedNotes,
+    previousFilename2AnkiId,
+    ankiIdRecordPath,
     vaultPath,
     notesPath,
-    htmlGenPath,
     deck,
     modelName,
     cardTemplates,

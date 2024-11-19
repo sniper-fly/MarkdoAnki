@@ -1,19 +1,14 @@
 import { invokeAnkiApi } from './invokeAnkiApi';
 
 export async function updateAnkiNote(
-  ankiId: string,
+  ankiId: number,
   note: string,
   html: string,
   tags: string[]
 ) {
-  const ankiIdNum = Number(ankiId);
-  if (isNaN(ankiIdNum)) {
-    throw new Error("Invalid Anki ID" + ": " + ankiId);
-  }
-
   const response = await invokeAnkiApi("updateNote", {
     note: {
-      id: ankiIdNum,
+      id: ankiId,
       fields: {
         Front: note.replace(/\.md$/, ""),
         Back: html,
