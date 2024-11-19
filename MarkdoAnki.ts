@@ -1,7 +1,5 @@
-import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
 import { listUpdatedNoteTitles } from "./lib/listUpdatedNoteTitles";
 import { generateAnkiCards } from "./lib/generateAnkiCards";
-import { deleteAnkiCards } from "./lib/deleteAnkiCards";
 import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
 import { Config } from "./config";
 import { invokeAnkiApi } from "./lib/invokeAnkiApi";

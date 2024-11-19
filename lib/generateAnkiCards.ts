@@ -1,8 +1,6 @@
-import { extractAnkiId } from "./extractAnkiId";
-import { mkdir, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { extractTags } from "./extractTags";
 import { mdToHtml } from "./mdToHtml";
-import { insertAnkiID } from "./insertAnkiID";
 import { Config } from "../config";
 import { addAnkiNote, updateAnkiNote } from "./ankiNoteApiOperation";
 import { join } from "path";
