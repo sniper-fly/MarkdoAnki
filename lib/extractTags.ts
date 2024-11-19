@@ -12,7 +12,12 @@ Some content here
 */
 
 export function extractTags(data: string): string[] {
-  const frontMatter = data.match(/---\n([\s\S]*?)---/);
+  // Check if string is empty or doesn't start with ---\n
+  if (!data || !data.startsWith("---\n")) {
+    return [];
+  }
+
+  const frontMatter = data.match(/^---\n([\s\S]*?)\n---(?:\n|$)/);
   if (!frontMatter) {
     return [];
   }
@@ -22,15 +27,12 @@ export function extractTags(data: string): string[] {
     return [];
   }
 
-  // - で始まる行を取得し、次のプロパティが始まるまでを取得する
-  const tagsArray = tags[1].match(/\s+-.*\n/g);
+  // - で始まる行を取得し、次のプロパティが始まるまで、又はFrontMatterの終わりまでを取得する
+  const tagsArray = tags[1].match(/\s+-.*(?:\n|$)/g);
   if (!tagsArray) {
     return [];
   }
 
-  // "- ", "\n", 前後の空白を削除して配列に格納する
-  const result = tagsArray.map((tag) =>
-    tag.replace(/- /, "").replace(/\n/, "").trim()
-  );
-  return result;
+  // 先頭の "  - " を削除し、空白を削除する
+  return tagsArray.map((tag) => tag.replace(/^\s+- /, "").trim());
 }
