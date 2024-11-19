@@ -1,5 +1,5 @@
 import { retrieveCurrentAnkiIds } from "./lib/retrieveCurrentAnkiIds";
-import { listUpdatedNotes } from "./lib/listUpdatedNotes";
+import { listUpdatedNoteTitles } from "./lib/listUpdatedNoteTitles";
 import { generateAnkiCards } from "./lib/generateAnkiCards";
 import { deleteAnkiCards } from "./lib/deleteAnkiCards";
 import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
@@ -37,7 +37,7 @@ export async function MarkdoAnki({
   await invokeAnkiApi("deleteNotes", { notes: deletedCardIds });
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
-  const updatedNotes = listUpdatedNotes(notesPath, lastUpdatedAt);
+  const updatedNotes = listUpdatedNoteTitles(notesPath, lastUpdatedAt);
 
   // deck作成 (すでにあればスキップ)
   await invokeAnkiApi("createDeck", { deck });
@@ -51,7 +51,7 @@ export async function MarkdoAnki({
 
   // 配列BのファイルからHTMLを出力
   await generateAnkiCards({
-    notes: updatedNotes,
+    noteTitles: updatedNotes,
     previousNoteTitle2AnkiId,
     ankiIdRecordPath,
     vaultPath,
