@@ -16,7 +16,7 @@
 // });
 
 import { MarkdoAnki } from "./MarkdoAnki";
-import { listNoteTitles } from "./listNoteTitles";
+import { listTargetNoteTitles } from "./listTargetNoteTitles";
 import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
 import { listUpdatedNoteTitles } from "./listUpdatedNoteTitles";
 import { invokeAnkiApi } from "./invokeAnkiApi";
@@ -26,7 +26,7 @@ import { overWriteLastUpdatedAt } from "./overWriteLastUpdatedAt";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock all dependencies
-vi.mock("./listNoteTitles");
+vi.mock("./listTargetNoteTitles");
 vi.mock("./parseAnkiIdRecord");
 vi.mock("./listUpdatedNoteTitles");
 vi.mock("./invokeAnkiApi");
@@ -63,7 +63,7 @@ describe("MarkdoAnki", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getLastUpdatedAt).mockReturnValue(mockDate);
-    vi.mocked(listNoteTitles).mockReturnValue(new Set(["note1", "note2"]));
+    vi.mocked(listTargetNoteTitles).mockReturnValue(new Set(["note1", "note2"]));
     vi.mocked(parseAnkiIdRecord).mockReturnValue({ note2: 1234, note3: 5678 });
     vi.mocked(listUpdatedNoteTitles).mockReturnValue(["note1"]);
     vi.mocked(invokeAnkiApi).mockResolvedValue(undefined);
@@ -118,7 +118,7 @@ describe("MarkdoAnki", () => {
   });
 
   it("should handle empty note list", async () => {
-    vi.mocked(listNoteTitles).mockReturnValue(new Set());
+    vi.mocked(listTargetNoteTitles).mockReturnValue(new Set());
     vi.mocked(listUpdatedNoteTitles).mockReturnValue([]);
 
     await MarkdoAnki(mockConfig);

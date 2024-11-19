@@ -4,7 +4,7 @@ import { overWriteLastUpdatedAt } from "./overWriteLastUpdatedAt";
 import { Config } from "../config";
 import { invokeAnkiApi } from "./invokeAnkiApi";
 import { getLastUpdatedAt } from "./getLastUpdatedAt";
-import { listNoteTitles } from "./listNoteTitles";
+import { listTargetNoteTitles } from "./listTargetNoteTitles";
 import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
 
 export async function MarkdoAnki({
@@ -19,7 +19,7 @@ export async function MarkdoAnki({
   const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
 
   // Get a list of .md files in the note directory and store it in Set
-  const currentNoteTitleSet = listNoteTitles(notesPath);
+  const currentNoteTitleSet = listTargetNoteTitles(notesPath);
 
   // Read previousCardIdsRecord from ankiIdRecordPath
   // and create an object with filename as key and AnkiID as value.
