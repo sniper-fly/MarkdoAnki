@@ -12,7 +12,8 @@ tags:
 # Hello World
 This is a test.`;
     const result = removeFrontMatter(data);
-    const expected = `# Hello World
+    const expected = `\
+# Hello World
 This is a test.`;
     expect(result).toBe(expected);
   });
@@ -52,4 +53,28 @@ tags:
     const result = removeFrontMatter(data);
     expect(result).toBe(data);
   });
+
+  it("should not replace if first line is empty line.", () => {
+    const data = `\
+
+---
+title: Example
+tags:
+  - test
+---
+some content`;
+    const result = removeFrontMatter(data);
+    expect(result).toBe(data);
+  });
+
+  it("should not replace just a long --------- ", () => {
+    const data = `\
+---
+--------
+some content
+`;
+    const result = removeFrontMatter(data);
+    expect(result).toBe(data);
+  });
+
 });
