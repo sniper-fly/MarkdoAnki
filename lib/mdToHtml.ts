@@ -2,6 +2,7 @@ import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js"; // highlight.jsをインポート
 import { makeObsidianURI } from "./makeObsidianURI";
+import { removeFrontMatter } from "./removeFrontMatter";
 
 const marked = new Marked(
   { breaks: true, gfm: true },
@@ -23,7 +24,7 @@ export async function mdToHtml(
   vaultPath: string
 ) {
   // data 先頭の Front Matter を削除
-  const html = marked.parse(data.replace(/---\n([\s\S]*?)---/, ""));
+  const html = marked.parse(removeFrontMatter(data));
   const obsidianUri = makeObsidianURI(noteTitle, notesPath, vaultPath);
   // html 先頭にObsidianリンクを追加
   const obsidianTag = `<a href="${obsidianUri}">Open in Obsidian</a>`;
