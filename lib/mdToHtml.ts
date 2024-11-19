@@ -1,6 +1,7 @@
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js"; // highlight.jsをインポート
+import { makeObsidianURI } from "./makeObsidianURI";
 
 const marked = new Marked(
   { breaks: true, gfm: true },
@@ -17,26 +18,14 @@ const marked = new Marked(
 // ./hello.md を読み込んで HTML に変換
 export async function mdToHtml(
   data: string,
-  notePath: string,
+  notesPath: string,
+  noteTitle: string,
   vaultPath: string
 ) {
   // data 先頭の Front Matter を削除
   const html = marked.parse(data.replace(/---\n([\s\S]*?)---/, ""));
-  // notePath から末尾の .md を削除し、vaultPath を notePath の先頭から削除
-  const noteTitle = notePath
-    .replace(/\.md$/, "")
-    .replace(vaultPath, "")
-    .replace(/^\//, "");
-  // vault名は/で区切られていた場合は最後の空白でない要素を取得
-  const vaultName = vaultPath
-    .split("/")
-    .filter((x) => x !== "")
-    .pop();
-  // obsidianへのリンクを作成し、URLエンコード
-  const obsidianLink = `obsidian://open?vault=${vaultName}&file=${encodeURIComponent(
-    noteTitle
-  )}`;
+  const obsidianUri = makeObsidianURI(noteTitle, notesPath, vaultPath);
   // html 先頭にObsidianリンクを追加
-  const obsidianTag = `<a href="${obsidianLink}">Open in Obsidian</a>`;
+  const obsidianTag = `<a href="${obsidianUri}">Open in Obsidian</a>`;
   return obsidianTag + "\n" + html;
 }

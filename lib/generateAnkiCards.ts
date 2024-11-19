@@ -25,10 +25,10 @@ export async function generateAnkiCards({
   // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
   const newTitle2AnkiId = {} as Record<string, number>;
   for (const title of noteTitles) {
-    const notePath = `${notesPath}/${title}`;
+    const notePath = join(notesPath, `${title}.md`);
     const data = readFileSync(notePath, "utf8");
     const tags = extractTags(data);
-    const html = await mdToHtml(data, `${notesPath}/${title}`, vaultPath);
+    const html = await mdToHtml(data, notesPath, title, vaultPath);
     let ankiId = previousNoteTitle2AnkiId[title];
     if (ankiId) {
       if (ankiId === -1) {
