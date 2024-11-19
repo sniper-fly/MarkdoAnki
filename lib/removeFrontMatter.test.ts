@@ -54,7 +54,7 @@ tags:
     expect(result).toBe(data);
   });
 
-  it("should not replace if first line is empty line.", () => {
+  it("should not replace if first line is empty.", () => {
     const data = `\
 
 ---
