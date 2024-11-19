@@ -6,7 +6,7 @@ import { overWriteLastUpdatedAt } from "./lib/overWriteLastUpdatedAt";
 import { Config } from "./config";
 import { invokeAnkiApi } from "./lib/invokeAnkiApi";
 import { getLastUpdatedAt } from "./lib/getLastUpdatedAt";
-import { noteFilenames } from "./lib/noteFilenames";
+import { listNoteTitles } from "./lib/listNoteTitles";
 import { parseAnkiIdRecord } from "./lib/parseAnkiIdRecord";
 
 export async function MarkdoAnki({
@@ -21,7 +21,7 @@ export async function MarkdoAnki({
   const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
 
   // Get a list of .md files in the note directory and store it in Set
-  const noteFilesSet = noteFilenames(notesPath);
+  const noteTitleSet = listNoteTitles(notesPath);
 
   // Read previousCardIdsRecord from ankiIdRecordPath
   // and create an object with filename as key and AnkiID as value.
@@ -30,7 +30,7 @@ export async function MarkdoAnki({
   // Convert object to an object array of { key=filename, value=AnkiID },
   // creating an object array listing filenames not in the Set.
   const deletedCardIds = Object.entries(previousFilename2AnkiId)
-    .filter(([filename]) => !noteFilesSet.has(filename))
+    .filter(([filename]) => !noteTitleSet.has(filename))
     .map(([, id]) => id);
 
   // 対応するAnkiカードを削除
