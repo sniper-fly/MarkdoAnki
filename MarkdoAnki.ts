@@ -21,16 +21,16 @@ export async function MarkdoAnki({
   const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
 
   // Get a list of .md files in the note directory and store it in Set
-  const noteTitleSet = listNoteTitles(notesPath);
+  const currentNoteTitleSet = listNoteTitles(notesPath);
 
   // Read previousCardIdsRecord from ankiIdRecordPath
   // and create an object with filename as key and AnkiID as value.
-  const previousFilename2AnkiId = parseAnkiIdRecord(ankiIdRecordPath);
+  const previousNoteTitle2AnkiId = parseAnkiIdRecord(ankiIdRecordPath);
 
   // Convert object to an object array of { key=filename, value=AnkiID },
   // creating an object array listing filenames not in the Set.
-  const deletedCardIds = Object.entries(previousFilename2AnkiId)
-    .filter(([filename]) => !noteTitleSet.has(filename))
+  const deletedCardIds = Object.entries(previousNoteTitle2AnkiId)
+    .filter(([title]) => !currentNoteTitleSet.has(title))
     .map(([, id]) => id);
 
   // 対応するAnkiカードを削除
@@ -52,7 +52,7 @@ export async function MarkdoAnki({
   // 配列BのファイルからHTMLを出力
   await generateAnkiCards({
     notes: updatedNotes,
-    previousFilename2AnkiId,
+    previousNoteTitle2AnkiId,
     ankiIdRecordPath,
     vaultPath,
     notesPath,

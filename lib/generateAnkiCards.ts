@@ -9,12 +9,12 @@ import { join } from "path";
 
 type Props = {
   notes: string[];
-  previousFilename2AnkiId: Record<string, number>;
+  previousNoteTitle2AnkiId: Record<string, number>;
 } & Omit<Config, "createAllCards">;
 
 export async function generateAnkiCards({
   notes,
-  previousFilename2AnkiId,
+  previousNoteTitle2AnkiId,
   ankiIdRecordPath,
   vaultPath,
   notesPath,
