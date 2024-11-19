@@ -29,10 +29,6 @@ export async function generateAnkiCards({
     const html = await mdToHtml(data, notesPath, title, vaultPath);
     let ankiId = previousNoteTitle2AnkiId[title];
     if (ankiId) {
-      if (ankiId === -1) {
-        newTitle2AnkiId[title] = ankiId;
-        continue;
-      }
       await updateAnkiNote(ankiId, title, html, tags);
     } else {
       ankiId = await addAnkiNote(deck, modelName, title, html, tags);
