@@ -10,7 +10,7 @@ export function makeObsidianURI(
   const fullNoteTitle = `${notesPathRelative}/${noteTitle}`;
   const vaultName = basename(vaultPath);
   // obsidianへのリンクを作成し、URLエンコード
-  return `obsidian://open?vault=${vaultName}&file=${encodeURIComponent(
-    fullNoteTitle
-  )}`;
+  return `obsidian://open?vault=${encodeURIComponent(
+    vaultName
+  )}&file=${encodeURIComponent(fullNoteTitle)}`;
 }
