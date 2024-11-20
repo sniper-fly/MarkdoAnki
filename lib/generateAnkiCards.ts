@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
 import { extractTags } from "./extractTags";
 import { mdToHtml } from "./mdToHtml";
 import { Config } from "../config";
@@ -8,12 +8,11 @@ import { join } from "path";
 type Props = {
   noteTitles: string[];
   currentNoteTitle2AnkiId: Record<string, number>;
-} & Omit<Config, "createAllCards">;
+} & Omit<Config, "createAllCards" | "ankiIdRecordPath">;
 
 export async function generateAnkiCards({
   noteTitles,
   currentNoteTitle2AnkiId,
-  ankiIdRecordPath,
   vaultPath,
   notesPath,
   deck,
@@ -35,15 +34,5 @@ export async function generateAnkiCards({
       newNoteTitle2AnkiId[title] = ankiId;
     }
   }
-
-  // __previousCardIdsRecord__.md にファイル名とAnkiIDを保存
-  const CardIdsRecordStr = Object.entries(newNoteTitle2AnkiId)
-    .map(([filename, id]) => `${id}/[[${filename}]]`)
-    .join("\n");
-  // ディレクトリが存在しない場合は作成
-  mkdirSync(ankiIdRecordPath, { recursive: true });
-  writeFileSync(
-    join(ankiIdRecordPath, "__previousCardIdsRecord__.md"),
-    CardIdsRecordStr
-  );
+  return newNoteTitle2AnkiId;
 }
