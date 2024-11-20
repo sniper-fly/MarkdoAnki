@@ -10,7 +10,8 @@
     "vitest": "^2.1.5"
   },
   "scripts": {
-    "create": "npx tsx ./main.ts"
+    "create": "npx tsx ./main.ts",
+    "delete": "npx tsx ./deleteDeck.ts"
   },
   "dependencies": {
     "node-notifier": "^10.0.1"
