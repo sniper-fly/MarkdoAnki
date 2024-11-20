@@ -46,8 +46,13 @@ export async function MarkdoAnki({
     deletedCards
   );
 
-  // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
-  const updatedNotes = listUpdatedNoteTitles(notesPath, lastUpdatedAt);
+  // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいもの
+  // currentNoteTitleSet に含まれるものを取得
+  const updatedNotes = listUpdatedNoteTitles(
+    notesPath,
+    currentNoteTitleSet,
+    lastUpdatedAt
+  );
 
   // deck作成 (すでにあればスキップ)
   await invokeAnkiApi("createDeck", { deck });
