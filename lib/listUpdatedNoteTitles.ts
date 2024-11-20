@@ -1,30 +1,20 @@
-import { readdirSync, statSync } from "fs";
+import { statSync } from "fs";
+import { basename, join } from "path";
 
-// path に存在する.mdファイルから、lastUpdatedAtより更新日時が新しいものを探してファイル名パスを配列に格納する
+// lastUpdatedAt以降に更新されたファイルから、拡張子を除いたノートタイトルを返す
 export function listUpdatedNoteTitles(
   path: string,
   currentNoteTitleSet: Set<string>,
   lastUpdatedAt: Date
 ): string[] {
-  const updatedFiles: string[] = [];
-
-  // path に存在する.mdファイルを全て読み込む
-  const files = readdirSync(path);
-  files.forEach((file) => {
-    // .mdファイルのみを対象とする
-    if (!file.match(/.*\.md$/)) {
-      return;
-    }
-    const title = file.replace(/.md$/, "");
-    if (!currentNoteTitleSet.has(title)) {
-      return;
-    }
-    // ファイルの更新日時を取得する
-    const stats = statSync(`${path}/${file}`);
+  const investigateFiles = Array.from(currentNoteTitleSet).map((title) =>
+    join(path, `${title}.md`)
+  );
+  return investigateFiles.reduce((acc, file) => {
+    const stats = statSync(file);
     if (stats.mtime > lastUpdatedAt) {
-      updatedFiles.push(`${title}`);
+      acc.push(basename(file, ".md"));
     }
-  });
-
-  return updatedFiles;
+    return acc;
+  }, [] as string[]);
 }

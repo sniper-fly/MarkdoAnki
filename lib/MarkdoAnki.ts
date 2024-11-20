@@ -46,8 +46,7 @@ export async function MarkdoAnki({
     deletedCards
   );
 
-  // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいもの
-  // currentNoteTitleSet に含まれるものを取得
+  // Update日時が lastUpdatedAt より新しいものcurrentNoteTitleSet に含まれるものを取得
   const updatedNotes = listUpdatedNoteTitles(
     notesPath,
     currentNoteTitleSet,
