@@ -30,8 +30,8 @@ export async function generateAnkiCards({
     if (ankiId) {
       await updateAnkiNote(ankiId, title, html, tags);
     } else {
-      const ankiId = await addAnkiNote(deck, modelName, title, html, tags);
-      newNoteTitle2AnkiId[title] = ankiId;
+      const newAnkiId = await addAnkiNote(deck, modelName, title, html, tags);
+      newNoteTitle2AnkiId[title] = newAnkiId;
     }
   }
   return newNoteTitle2AnkiId;

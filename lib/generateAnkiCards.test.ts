@@ -37,7 +37,7 @@ describe("generateAnkiCards", () => {
   });
 
   it("should create new cards and update existing ones", async () => {
-    await generateAnkiCards(mockConfig);
+    const result = await generateAnkiCards(mockConfig);
 
     // Check new card creation
     expect(addAnkiNote).toHaveBeenCalledWith(
@@ -64,6 +64,13 @@ describe("generateAnkiCards", () => {
       expect.any(String),
       expect.any(Array)
     );
+
+    // Check the returned newNoteTitle2AnkiId
+    expect(result).toEqual({
+      note2: 1234,
+      note3: 5678,
+      note1: 5678,
+    });
   });
 
   it("should handle errors in file operations", async () => {
