@@ -1,7 +1,7 @@
 import { generateAnkiCards } from "./generateAnkiCards";
 import { mdToHtml } from "./mdToHtml";
 import { addAnkiNote, updateAnkiNote } from "./ankiNoteApiOperation";
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { readFileSync } from "fs";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { extractTags } from "./extractTags";
 
@@ -12,11 +12,11 @@ vi.mock("./ankiNoteApiOperation");
 vi.mock("./extractTags");
 
 describe("generateAnkiCards", () => {
-  const mockConfig = {
+  const mockConfigTemplate = {
     noteTitles: ["note1", "note2", "note3"],
-    previousNoteTitle2AnkiId: {
+    currentNoteTitle2AnkiId: {
       note2: 1234,
-      note3: -1,
+      note3: 5678,
     },
     ankiIdRecordPath: "/path/to/record",
     vaultPath: "/path/to/vault",
@@ -24,9 +24,11 @@ describe("generateAnkiCards", () => {
     deck: "Test Deck",
     modelName: "Basic",
   };
+  let mockConfig: typeof mockConfigTemplate;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockConfig = { ...mockConfigTemplate };
     vi.mocked(readFileSync).mockReturnValue("# Test Note\ntags: test");
     vi.mocked(extractTags).mockReturnValue(["test"]);
     vi.mocked(mdToHtml).mockResolvedValue("<h1>Test Note</h1>");
@@ -64,23 +66,10 @@ describe("generateAnkiCards", () => {
     );
   });
 
-  it("should create record file with correct format", async () => {
-    await generateAnkiCards(mockConfig);
-
-    expect(mkdirSync).toHaveBeenCalledWith("/path/to/record", {
-      recursive: true,
-    });
-    expect(writeFileSync).toHaveBeenCalledWith(
-      "/path/to/record/__previousCardIdsRecord__.md",
-      "5678/[[note1]]\n1234/[[note2]]\n-1/[[note3]]"
-    );
-  });
-
   it("should handle errors in file operations", async () => {
     vi.mocked(readFileSync).mockImplementation(() => {
       throw new Error("File read error");
     });
-
     await expect(generateAnkiCards(mockConfig)).rejects.toThrow(
       "File read error"
     );

@@ -21,6 +21,7 @@ export async function generateAnkiCards({
 }: Props) {
   // NoteにAnkiIDが付与されていれば、AnkiIDをファイル名としてHTMLファイルを出力
   // そうでなければ、HTMLファイルを出力、Ankiカードを作成してからAnkiIDを.mdファイルに付与して保存
+  const newNoteTitle2AnkiId = { ...currentNoteTitle2AnkiId };
   for (const title of noteTitles) {
     const notePath = join(notesPath, `${title}.md`);
     const data = readFileSync(notePath, "utf8");
@@ -31,12 +32,12 @@ export async function generateAnkiCards({
       await updateAnkiNote(ankiId, title, html, tags);
     } else {
       const ankiId = await addAnkiNote(deck, modelName, title, html, tags);
-      currentNoteTitle2AnkiId[title] = ankiId;
+      newNoteTitle2AnkiId[title] = ankiId;
     }
   }
 
   // __previousCardIdsRecord__.md にファイル名とAnkiIDを保存
-  const CardIdsRecordStr = Object.entries(currentNoteTitle2AnkiId)
+  const CardIdsRecordStr = Object.entries(newNoteTitle2AnkiId)
     .map(([filename, id]) => `${id}/[[${filename}]]`)
     .join("\n");
   // ディレクトリが存在しない場合は作成
