@@ -24,6 +24,7 @@ import { generateAnkiCards } from "./generateAnkiCards";
 import { getLastUpdatedAt } from "./getLastUpdatedAt";
 import { overWriteLastUpdatedAt } from "./overWriteLastUpdatedAt";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { getCurrentNoteTitle2AnkiId } from "./getCurrentNoteTitle2AnkiId";
 
 // Mock all dependencies
 vi.mock("./listTargetNoteTitles");
@@ -34,8 +35,12 @@ vi.mock("./generateAnkiCards");
 vi.mock("./lastUpdatedAt");
 vi.mock("./getLastUpdatedAt");
 vi.mock("./overWriteLastUpdatedAt");
+vi.mock("./getCurrentNoteTitle2AnkiId");
 
-function excludeKey<T extends object, K extends keyof T>(obj: T, key: K): Omit<T, K> {
+function excludeKey<T extends object, K extends keyof T>(
+  obj: T,
+  key: K
+): Omit<T, K> {
   const { [key]: _, ...rest } = obj;
   return rest;
 }
@@ -63,11 +68,17 @@ describe("MarkdoAnki", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getLastUpdatedAt).mockReturnValue(mockDate);
-    vi.mocked(listTargetNoteTitles).mockReturnValue(new Set(["note1", "note2"]));
+    vi.mocked(listTargetNoteTitles).mockReturnValue(
+      new Set(["note1", "note2"])
+    );
     vi.mocked(parseAnkiIdRecord).mockReturnValue({ note2: 1234, note3: 5678 });
     vi.mocked(listUpdatedNoteTitles).mockReturnValue(["note1"]);
     vi.mocked(invokeAnkiApi).mockResolvedValue(undefined);
     vi.mocked(generateAnkiCards).mockResolvedValue(undefined);
+    vi.mocked(getCurrentNoteTitle2AnkiId).mockReturnValue({
+      note2: 1234,
+      note3: 5678,
+    });
   });
 
   it("should process notes correctly", async () => {
@@ -93,7 +104,7 @@ describe("MarkdoAnki", () => {
     // Should generate cards
     expect(generateAnkiCards).toHaveBeenCalledWith({
       noteTitles: ["note1"],
-      previousNoteTitle2AnkiId: { note2: 1234, note3: 5678 },
+      currentNoteTitle2AnkiId: { note2: 1234, note3: 5678 },
       ...excludeKey(mockConfig, "createAllCards"),
     });
 
