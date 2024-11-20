@@ -1,5 +1,6 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
+import { ankiIdRecordFileName } from "./constants";
 
 export function recordLatestCardIds(
   ankiIdRecordPath: string,
@@ -10,7 +11,7 @@ export function recordLatestCardIds(
     .join("\n");
   mkdirSync(ankiIdRecordPath, { recursive: true });
   writeFileSync(
-    join(ankiIdRecordPath, "__previousCardIdsRecord__.md"),
+    join(ankiIdRecordPath, ankiIdRecordFileName),
     CardIdsRecordStr
   );
 }

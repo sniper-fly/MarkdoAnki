@@ -2,6 +2,7 @@ import { recordLatestCardIds } from "./recordLatestCardIds";
 import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { ankiIdRecordFileName } from "./constants";
 
 vi.mock("fs");
 
@@ -22,7 +23,7 @@ describe("recordLatestCardIds", () => {
 
     expect(mkdirSync).toHaveBeenCalledWith(ankiIdRecordPath, { recursive: true });
     expect(writeFileSync).toHaveBeenCalledWith(
-      join(ankiIdRecordPath, "__previousCardIdsRecord__.md"),
+      join(ankiIdRecordPath, ankiIdRecordFileName),
       "1234/[[note1]]\n5678/[[note2]]\n-1/[[note3]]"
     );
   });
@@ -35,7 +36,7 @@ describe("recordLatestCardIds", () => {
 
     expect(mkdirSync).toHaveBeenCalledWith(ankiIdRecordPath, { recursive: true });
     expect(writeFileSync).toHaveBeenCalledWith(
-      join(ankiIdRecordPath, "__previousCardIdsRecord__.md"),
+      join(ankiIdRecordPath, ankiIdRecordFileName),
       ""
     );
   });

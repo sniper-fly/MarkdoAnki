@@ -1,11 +1,12 @@
 import { readFileSync } from "fs";
 import { join } from "path";
+import { ankiIdRecordFileName } from "./constants";
 
 export function parseAnkiIdRecord(ankiIdRecordPath: string) {
   let ankiIdRecord = "";
   try {
     ankiIdRecord = readFileSync(
-      join(ankiIdRecordPath, "__previousCardIdsRecord__.md"),
+      join(ankiIdRecordPath, ankiIdRecordFileName),
       "utf8"
     );
   } catch (e) {
