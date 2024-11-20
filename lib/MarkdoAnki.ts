@@ -7,6 +7,7 @@ import { getLastUpdatedAt } from "./getLastUpdatedAt";
 import { listTargetNoteTitles } from "./listTargetNoteTitles";
 import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
 import { getCurrentNoteTitle2AnkiId } from "./getCurrentNoteTitle2AnkiId";
+import { recordLatestCardIds } from "./recordLatestCardIds";
 
 export async function MarkdoAnki({
   createAllCards,
@@ -57,16 +58,18 @@ export async function MarkdoAnki({
   });
 
   // updatedNotes に対応するAnkiカードを作成, 更新
-  await generateAnkiCards({
+  const newNoteTitle2AnkiId = await generateAnkiCards({
     noteTitles: updatedNotes,
     currentNoteTitle2AnkiId,
-    ankiIdRecordPath,
     vaultPath,
     notesPath,
     deck,
     modelName,
     cardTemplates,
   });
+
+  // __previousCardIdsRecord__.md にファイル名とAnkiIDを保存
+  recordLatestCardIds(ankiIdRecordPath, newNoteTitle2AnkiId);
 
   // lastUpdatedAt を現在時刻に更新
   overWriteLastUpdatedAt();
