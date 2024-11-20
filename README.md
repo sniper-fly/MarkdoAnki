@@ -1,16 +1,16 @@
 # MarkdoAnki
-MarkdoAnki is a tool that integrates Markdown notes with Anki, a powerful flashcard application. It allows you to bulk-generate Anki cards from your Markdown notes in your Obsidian Vault, update them, and manage them efficiently.
+MarkdoAnki is a tool that integrates Markdown notes from your Obsidian vault with Anki flashcards. It enables bulk-generating Anki cards from your Markdown notes in your Obsidian Vault, update them, and manage them efficiently.
 
 ## Features
-- Convert Markdown to HTML with Obsidian links.
+- Convert Markdown to HTML.
 - Insert Obsidian URI into Anki Cards.
-- Extract tags and Anki IDs from Markdown front matter.
-- Insert Anki IDs into Markdown front matter.
-- Generate and delete Anki cards based on your notes.
+- Handles YAML front matter for Anki metadata
+- Tracks updates and syncs only modified notes (Generate and delete Anki cards based on your notes.)
+- Supports custom Anki card templates and decks
 
 ## Usage
 
-1. Install dependencies:
+1. Clone this repo and install dependencies:
     ```sh
     npm install
     ```
@@ -22,6 +22,14 @@ MarkdoAnki is a tool that integrates Markdown notes with Anki, a powerful flashc
     npm run create
     ```
 
+
+
+This Software creates tracking log file on ankiIdRecordPath (you can configure).
+You can also delete decks and log file by:
+```
+    npm run delete
+```
+
 ## Configuration
 
 Edit the `config.ts` file to set your desired configuration:
@@ -30,9 +38,17 @@ Edit the `config.ts` file to set your desired configuration:
 export const config = {
   createAllCards: false,
   vaultPath: 'path/to/your/vault',
-  notesPath: 'path/to/your/notes',
-  htmlGenPath: 'path/to/html/output',
+  notesPath: 'path/to/your/vault/notes',
   deck: 'Your Anki Deck Name',
   modelName: 'Your Anki Model Name',
   cardTemplates: [/* your card templates */],
 };
+```
+
+## Requirements
+- Node.js
+- Anki with AnkiConnect plugin
+- Obsidian (for note management)
+
+## License
+MIT License
