@@ -29,19 +29,18 @@ export async function MarkdoAnki({
 
   // Convert object to an object array of { key=filename, value=AnkiID },
   // creating an object array listing filenames not in the Set.
-  const deletedCardIds = Object.entries(previousNoteTitle2AnkiId)
+  const deletedCards = Object.entries(previousNoteTitle2AnkiId)
     .filter(([title]) => !currentNoteTitleSet.has(title))
-    .map(([, id]) => id);
 
   // 対応するAnkiカードを削除
-  await invokeAnkiApi("deleteNotes", { notes: deletedCardIds });
-
+  await invokeAnkiApi("deleteNotes", { notes: deletedCards.map(([, id]) => id) });
   // Convert the title in currentNoteTitleSet to an array, and if the key
   // corresponding to the title already exists in previousNoteTitle2AnkiId,
   // use the key-value pair as is and store it in currentNoteTitle2AnkiId.
   const currentNoteTitle2AnkiId = getCurrentNoteTitle2AnkiId(
     currentNoteTitleSet,
-    previousNoteTitle2AnkiId
+    previousNoteTitle2AnkiId,
+    deletedCards
   );
 
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
