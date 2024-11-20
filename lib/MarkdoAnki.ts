@@ -6,6 +6,7 @@ import { invokeAnkiApi } from "./invokeAnkiApi";
 import { getLastUpdatedAt } from "./getLastUpdatedAt";
 import { listTargetNoteTitles } from "./listTargetNoteTitles";
 import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
+import { getCurrentNoteTitle2AnkiId } from "./getCurrentNoteTitle2AnkiId";
 
 export async function MarkdoAnki({
   createAllCards,
@@ -34,6 +35,14 @@ export async function MarkdoAnki({
   // 対応するAnkiカードを削除
   await invokeAnkiApi("deleteNotes", { notes: deletedCardIds });
 
+  // Convert the title in currentNoteTitleSet to an array, and if the key
+  // corresponding to the title already exists in previousNoteTitle2AnkiId,
+  // use the key-value pair as is and store it in currentNoteTitle2AnkiId.
+  const currentNoteTitle2AnkiId = getCurrentNoteTitle2AnkiId(
+    currentNoteTitleSet,
+    previousNoteTitle2AnkiId
+  );
+
   // .mdファイルの中でUpdate日時が lastUpdatedAt より新しいものを探して、配列Bに格納
   const updatedNotes = listUpdatedNoteTitles(notesPath, lastUpdatedAt);
 
@@ -47,10 +56,10 @@ export async function MarkdoAnki({
     cardTemplates,
   });
 
-  // 配列BのファイルからHTMLを出力
+  // updatedNotes に対応するAnkiカードを作成, 更新
   await generateAnkiCards({
     noteTitles: updatedNotes,
-    previousNoteTitle2AnkiId,
+    currentNoteTitle2AnkiId,
     ankiIdRecordPath,
     vaultPath,
     notesPath,
