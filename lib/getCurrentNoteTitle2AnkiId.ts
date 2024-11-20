@@ -1,11 +1,9 @@
 export function getCurrentNoteTitle2AnkiId(
   currentNoteTitleSet: Set<string>,
-  previousNoteTitle2AnkiId: Record<string, number>,
-  deletedCards: [string, number][]
+  previousNoteTitle2AnkiId: Record<string, number>
 ) {
-  const deletedCardMap = new Map(deletedCards);
   return Array.from(currentNoteTitleSet).reduce((acc, title) => {
-    if (title in previousNoteTitle2AnkiId && !deletedCardMap.has(title)) {
+    if (title in previousNoteTitle2AnkiId) {
       acc[title] = previousNoteTitle2AnkiId[title];
     }
     return acc;

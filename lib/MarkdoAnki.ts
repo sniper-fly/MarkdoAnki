@@ -42,8 +42,7 @@ export async function MarkdoAnki({
   // use the key-value pair as is and store it in currentNoteTitle2AnkiId.
   const currentNoteTitle2AnkiId = getCurrentNoteTitle2AnkiId(
     currentNoteTitleSet,
-    previousNoteTitle2AnkiId,
-    deletedCards
+    previousNoteTitle2AnkiId
   );
 
   // Update日時が lastUpdatedAt より新しいものcurrentNoteTitleSet に含まれるものを取得
