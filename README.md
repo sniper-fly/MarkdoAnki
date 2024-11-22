@@ -1,8 +1,10 @@
 # MarkdoAnki
 MarkdoAnki is a tool that integrates Markdown notes from your Obsidian vault with Anki flashcards. It enables bulk-generating Anki cards from your Markdown notes in your Obsidian Vault, update them, and manage them efficiently.
 
+https://github.com/user-attachments/assets/c0d9749b-9fef-427b-86f2-1ea8ebd16c49
+
 ## Features
-- Convert Markdown to HTML.
+- Convert Markdown Notes to HTML Anki Cards. (Front is note title, Back is note content)
 - Insert Obsidian URI into Anki Cards.
 - Handles YAML front matter for Anki metadata
 - Tracks updates and syncs only modified notes (Generate and delete Anki cards based on your notes.)
