@@ -1,6 +1,6 @@
 import { MarkdoAnki } from "./lib/MarkdoAnki";
 import { config } from "./config";
-import notifier from 'node-notifier';
+import notifier from "node-notifier";
 
 (async () => {
   try {
@@ -9,10 +9,10 @@ import notifier from 'node-notifier';
     const error = e as Error;
     console.error(error);
     notifier.notify({
-      title: 'MarkdoAnki Error',
-      message: error.message || 'An error occurred',
+      title: "MarkdoAnki Error",
+      message: error.message || "An error occurred",
       sound: true, // Only Notification Center or Windows Toasters
-      wait: true // Wait with callback until user action is taken on notification
+      wait: true, // Wait with callback until user action is taken on notification
     });
   }
 })();
