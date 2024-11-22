@@ -29,7 +29,7 @@ add property like this
 Anki:
   false
 ```
-
+![Screenshot from 2024-11-22 09-49-38](https://github.com/user-attachments/assets/c960f3de-a437-4757-986d-862cf06acf90)
 
 This Software creates tracking log file on ankiIdRecordPath (you can configure).
 You can also delete decks and log file by:
