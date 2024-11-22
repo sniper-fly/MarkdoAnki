@@ -7,6 +7,7 @@ MarkdoAnki is a tool that integrates Markdown notes from your Obsidian vault wit
 - Handles YAML front matter for Anki metadata
 - Tracks updates and syncs only modified notes (Generate and delete Anki cards based on your notes.)
 - Supports custom Anki card templates and decks
+- File tracking can be set to disabled by adding property: "Anki: false" to the front matter.
 
 ## Usage
 
@@ -22,6 +23,12 @@ MarkdoAnki is a tool that integrates Markdown notes from your Obsidian vault wit
     npm run create
     ```
 
+If you have some notes you do not want to creates Anki card from it,
+add property like this
+```
+Anki:
+  false
+```
 
 
 This Software creates tracking log file on ankiIdRecordPath (you can configure).
