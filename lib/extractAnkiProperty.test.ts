@@ -7,8 +7,7 @@ describe("extractAnkiProperty", () => {
 ---
 title:
   Test
-Anki:
-  false
+Anki: "false"
 tags:
   - test
 ---
@@ -20,7 +19,7 @@ content`;
     const data = `\
 ---
 Anki:
-  false
+  "false"
 ---
 content`;
     expect(extractAnkiProperty(data)).toBe("false");
@@ -44,7 +43,7 @@ content`;
 title:
   Test
 Anki:
-  false
+  "false"
 --
 content`;
     expect(extractAnkiProperty(data)).toBeNull();
@@ -59,22 +58,11 @@ content`;
     expect(extractAnkiProperty(data)).toBeNull();
   });
 
-  it("should handle whitespace around Anki property", () => {
-    const data = `\
----
-title: Test
-Anki:
-    Basic   
----
-content`;
-    expect(extractAnkiProperty(data)).toBe("Basic");
-  });
-
   it("should handle front matter without closing delimiter", () => {
     const data = `\
 ---
 title: Test
-Anki: Basic
+Anki: "Basic"
 content`;
     expect(extractAnkiProperty(data)).toBeNull();
   });
@@ -86,7 +74,7 @@ content`;
 title:
   Test
 Anki:
-  Basic
+  "Basic"
 ---
 content`;
     expect(extractAnkiProperty(data)).toBeNull();

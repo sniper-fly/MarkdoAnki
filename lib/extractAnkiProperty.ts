@@ -7,7 +7,7 @@ export function extractAnkiProperty(data: string) {
   if (!frontMatter) {
     return null;
   }
-  const ankiProperty = frontMatter[1].match(/Anki:\s*(\w+)/);
+  const ankiProperty = frontMatter[1].match(/Anki:\s*"(.+)"/);
   if (!ankiProperty) {
     return null;
   }
