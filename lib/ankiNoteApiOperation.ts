@@ -1,5 +1,13 @@
 import { invokeAnkiApi } from './invokeAnkiApi';
 
+export async function listAnkiNotes(deck: string): Promise<number[]> {
+  const data = await invokeAnkiApi("findNotes", {
+    query: `deck:${deck}`,
+  });
+  const json = await data.json();
+  return json.result;
+}
+
 export async function updateAnkiNote(
   ankiId: number,
   note: string,

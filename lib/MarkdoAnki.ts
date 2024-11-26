@@ -8,6 +8,7 @@ import { listTargetNoteTitles } from "./listTargetNoteTitles";
 import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
 import { getCurrentNoteTitle2AnkiId } from "./getCurrentNoteTitle2AnkiId";
 import { recordLatestCardIds } from "./recordLatestCardIds";
+import { listAnkiNotes } from "./ankiNoteApiOperation";
 
 export async function MarkdoAnki({
   createAllCards,
@@ -51,6 +52,14 @@ export async function MarkdoAnki({
     currentNoteTitleSet,
     lastUpdatedAt
   );
+
+  const ankiNoteIds = await listAnkiNotes(deck);
+
+  // const renamedNotes = listRenamedNoteTitles(
+  //   notesPath,
+  //   currentNoteTitleSet,
+  //   ankiNoteIds
+  // );
 
   // deck作成 (すでにあればスキップ)
   await invokeAnkiApi("createDeck", { deck });
