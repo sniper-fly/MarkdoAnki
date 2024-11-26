@@ -31,6 +31,11 @@ export async function MarkdoAnki({
   const deletedCards = Object.entries(previousNoteTitle2AnkiId).filter(
     ([title]) => !currentNoteTitleSet.has(title)
   );
+  if (deletedCards.length > 10) {
+    throw new Error(
+      "The number of deleted cards is too large. Please check the file."
+    );
+  }
 
   // 対応するAnkiカードを削除
   await invokeAnkiApi("deleteNotes", {
