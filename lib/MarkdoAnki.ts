@@ -8,7 +8,7 @@ import { listTargetNoteTitles } from "./listTargetNoteTitles";
 import { parseAnkiIdRecord } from "./parseAnkiIdRecord";
 import { getCurrentNoteTitle2AnkiId } from "./getCurrentNoteTitle2AnkiId";
 import { recordLatestCardIds } from "./recordLatestCardIds";
-import { listAnkiNotes } from "./ankiNoteApiOperation";
+import { retrieveTitlesFromAnki } from "./retrieveTitlesFromAnki";
 
 export async function MarkdoAnki({
   createAllCards,
@@ -19,8 +19,6 @@ export async function MarkdoAnki({
   modelName,
   cardTemplates,
 }: Config) {
-  const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
-
   // Get a list of .md files in the note directory and store it in Set
   const currentNoteTitleSet = listTargetNoteTitles(notesPath);
 
@@ -38,6 +36,7 @@ export async function MarkdoAnki({
   await invokeAnkiApi("deleteNotes", {
     notes: deletedCards.map(([, id]) => id),
   });
+  console.log("deletedCards", deletedCards);
   // Convert the title in currentNoteTitleSet to an array, and if the key
   // corresponding to the title already exists in previousNoteTitle2AnkiId,
   // use the key-value pair as is and store it in currentNoteTitle2AnkiId.
@@ -46,20 +45,14 @@ export async function MarkdoAnki({
     previousNoteTitle2AnkiId
   );
 
+  const lastUpdatedAt = createAllCards ? new Date(0) : getLastUpdatedAt();
   // Update日時が lastUpdatedAt より新しいものcurrentNoteTitleSet に含まれるものを取得
   const updatedNotes = listUpdatedNoteTitles(
     notesPath,
     currentNoteTitleSet,
     lastUpdatedAt
   );
-
-  const ankiNoteIds = await listAnkiNotes(deck);
-
-  // const renamedNotes = listRenamedNoteTitles(
-  //   notesPath,
-  //   currentNoteTitleSet,
-  //   ankiNoteIds
-  // );
+  console.log("updatedNotes", updatedNotes);
 
   // deck作成 (すでにあればスキップ)
   await invokeAnkiApi("createDeck", { deck });
@@ -71,9 +64,17 @@ export async function MarkdoAnki({
     cardTemplates,
   });
 
+  const noteSetInAnki = await retrieveTitlesFromAnki(deck);
+  // Ankiデッキ内のカード内に存在しない、Obsidianのノートタイトルを取得
+  const untrackedNotes = Array.from(currentNoteTitleSet).filter(
+    (title) => !noteSetInAnki.has(title)
+  );
+  console.log("untrackedNotes", untrackedNotes);
+
+  const noteTitles = [...new Set([...updatedNotes, ...untrackedNotes])];
   // updatedNotes に対応するAnkiカードを作成, 更新
   const newNoteTitle2AnkiId = await generateAnkiCards({
-    noteTitles: updatedNotes,
+    noteTitles,
     currentNoteTitle2AnkiId,
     vaultPath,
     notesPath,
