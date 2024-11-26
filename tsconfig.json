@@ -2,6 +2,7 @@
   "compilerOptions": {
     "types": ["node"],
     "strict": true,
-    "noErrorTruncation": true
+    "noErrorTruncation": true,
+    "target": "ES2020"
   }
 }
