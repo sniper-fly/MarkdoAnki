@@ -2,6 +2,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^22.9.0",
+    "@types/node-notifier": "^8.0.5",
     "highlight.js": "^11.10.0",
     "marked": "^15.0.0",
     "marked-highlight": "^2.2.1",
