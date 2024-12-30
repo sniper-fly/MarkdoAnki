@@ -4,7 +4,7 @@ import { extractAnkiProperty } from "./extractAnkiProperty";
 
 export function listTargetNoteTitles(notesPath: string) {
   return readdirSync(notesPath).reduce((acc, file) => {
-    if (!file.endsWith(".md")) {
+    if (!file.endsWith(".md") || file === ".md") {
       return acc;
     }
     const data = readFileSync(join(notesPath, file), "utf8");

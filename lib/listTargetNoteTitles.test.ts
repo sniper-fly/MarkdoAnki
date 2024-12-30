@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from "fs";
 import { listTargetNoteTitles } from "./listTargetNoteTitles";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { extractAnkiProperty } from "./extractAnkiProperty";
 
 // Mock the fs module
@@ -8,6 +8,10 @@ vi.mock("fs");
 vi.mock("./extractAnkiProperty");
 
 describe("listTargetNoteTitles", () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   it("should return a set of filenames without extensions", () => {
     const mockFiles = ["note1.md", "note2.md", "note3.md"];
     vi.mocked(readdirSync).mockReturnValue(mockFiles as any);
@@ -62,6 +66,15 @@ describe("listTargetNoteTitles", () => {
 
     const result = listTargetNoteTitles("/path/to/notes");
     const expected = new Set(["note1", "note3"]);
+    expect(result).toEqual(expected);
+  });
+
+  it("should ignore files that are just '.md'", () => {
+    const mockFiles = ["note1.md", ".md", "note2.md"];
+    vi.mocked(readdirSync).mockReturnValue(mockFiles as any);
+
+    const result = listTargetNoteTitles("/path/to/notes68");
+    const expected = new Set(["note1", "note2"]);
     expect(result).toEqual(expected);
   });
 });
