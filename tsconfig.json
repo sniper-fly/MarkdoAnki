@@ -3,6 +3,7 @@
     "types": ["node"],
     "strict": true,
     "noErrorTruncation": true,
+    "esModuleInterop": true,
     "target": "ES2020",
     "moduleResolution":"node",
   }
